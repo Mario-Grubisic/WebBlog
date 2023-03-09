@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebBlog.Data;
 
@@ -12,10 +11,9 @@ using WebBlog.Data;
 namespace WebBlog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230308202926_Adding Post and Comment to database")]
-    partial class AddingPostandCommenttodatabase
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,7 +167,7 @@ namespace WebBlog.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("CommenterId")
+                    b.Property<string>("AuthorId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -187,7 +185,7 @@ namespace WebBlog.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommenterId");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("ParentId");
 
@@ -220,6 +218,9 @@ namespace WebBlog.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -346,12 +347,12 @@ namespace WebBlog.Migrations
 
             modelBuilder.Entity("WebBlog.Data.Models.Comment", b =>
                 {
-                    b.HasOne("WebBlog.Models.ApplicationUser", "Commenter")
+                    b.HasOne("WebBlog.Models.ApplicationUser", "Author")
                         .WithMany()
-                        .HasForeignKey("CommenterId");
+                        .HasForeignKey("AuthorId");
 
                     b.HasOne("WebBlog.Data.Models.Comment", "Parent")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -362,7 +363,7 @@ namespace WebBlog.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Commenter");
+                    b.Navigation("Author");
 
                     b.Navigation("Parent");
 
@@ -376,6 +377,11 @@ namespace WebBlog.Migrations
                         .HasForeignKey("CreatorId");
 
                     b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("WebBlog.Data.Models.Comment", b =>
+                {
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("WebBlog.Data.Models.Post", b =>

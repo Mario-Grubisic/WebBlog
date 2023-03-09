@@ -22,6 +22,8 @@ namespace WebBlog.Services
                 .Include(post => post.Creator)
                 .Include(post => post.Comments)
                     .ThenInclude(comment => comment.Author)
+                .Include(post => post.Comments)
+                    .ThenInclude(comment => comment.Comments)
                 .FirstOrDefault(post => post.Id == postId);
         }
 
