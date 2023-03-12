@@ -14,8 +14,8 @@ namespace WebBlog.Controllers
             this.postBusinessManager = postBusinessManager;
         }
 
-        [Route("Post/{id}"),AllowAnonymous]
-        public  async Task<IActionResult> Index(int? id)
+        /*[Route("Post/{id}"), AllowAnonymous]
+        public async Task<IActionResult> Index(int? id)
         {
             var actionResult = await postBusinessManager.GetPostViewModel(id, User);
 
@@ -23,7 +23,7 @@ namespace WebBlog.Controllers
                 return View(actionResult.Value);
 
             return actionResult.Result;
-        }
+        }*/
 
         public IActionResult Create()
         {
