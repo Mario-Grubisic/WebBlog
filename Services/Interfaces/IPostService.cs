@@ -8,6 +8,7 @@ namespace WebBlog.Services.Interfaces
         Post GetPost(int postId);
         IEnumerable<Post> GetPosts(string searchString);
         IEnumerable<Post> GetPosts(ApplicationUser applicationUser);
+        Comment GetComment(int commentId);
         Task<Post> Add(Post post);
         Task<Post> Update(Post post);
     }

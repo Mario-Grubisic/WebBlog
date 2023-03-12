@@ -45,6 +45,15 @@ namespace WebBlog.Services
                 .Where(post => post.Creator == applicationUser);
         }
 
+        public Comment GetComment(int commentId)
+        {
+            return applicationDbContext.Comments
+                .Include(comment => comment.Author)
+                .Include(comment => comment.Post)
+                .Include(comment => comment.Parent)
+                .FirstOrDefault(comment => comment.Id == comment.Id);
+        }
+
         public async Task<Post> Add(Post post)
         {
             applicationDbContext.Add(post);
