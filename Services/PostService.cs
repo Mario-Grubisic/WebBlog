@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using WebBlog.BusinessManagers.Interfaces;
 using WebBlog.Data;
 using WebBlog.Data.Models;
@@ -23,7 +24,8 @@ namespace WebBlog.Services
                 .Include(post => post.Comments)
                     .ThenInclude(comment => comment.Author)
                 .Include(post => post.Comments)
-                    .ThenInclude(comment => comment.Comments)
+                    .Include(comment => comment.Comments)
+                        .ThenInclude(reply => reply.Parent)
                 .FirstOrDefault(post => post.Id == postId);
         }
 
@@ -51,7 +53,7 @@ namespace WebBlog.Services
                 .Include(comment => comment.Author)
                 .Include(comment => comment.Post)
                 .Include(comment => comment.Parent)
-                .FirstOrDefault(comment => comment.Id == comment.Id);
+                .FirstOrDefault(comment => comment.Id == commentId);
         }
 
         public async Task<Post> Add(Post post)
@@ -59,6 +61,13 @@ namespace WebBlog.Services
             applicationDbContext.Add(post);
             await applicationDbContext.SaveChangesAsync();
             return post;
+        }
+
+        public async Task<Comment> Add(Comment comment)
+        {
+            applicationDbContext.Add(comment);
+            await applicationDbContext.SaveChangesAsync();
+            return comment;
         }
 
         public async Task<Post> Update(Post post)

@@ -202,7 +202,7 @@ namespace WebBlog.Migrations
                         column: x => x.ParentId,
                         principalTable: "Comments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_Posts_PostId",
                         column: x => x.PostId,
